@@ -1,0 +1,9 @@
+.home-page img {
+ 
+  height: 85vh;
+  opacity: 0.4;
+}
+.home-page {
+  display: flex;
+  justify-content: center;
+}

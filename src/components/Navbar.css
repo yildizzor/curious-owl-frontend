@@ -1,0 +1,25 @@
+.Navbar {
+  background-color: #3a7fe0;
+  /* background-color: #123cd2; */
+  background-color: #4582d9bf;
+  height: 15vh;
+  display: flex;
+  align-items: center;
+}
+
+.Navbar img {
+  width: 350px;
+}
+
+.Navbar ul {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  flex-grow: 1;
+}
+
+.logo {
+  align-self: stretch;
+  border-radius: 20px;
+  padding: 10px;
+}
