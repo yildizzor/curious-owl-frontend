@@ -1,0 +1,13 @@
+.Signup {
+  position: absolute;
+}
+.Signup-container {
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+.Signup-bg {
+  height: 70vh;
+  opacity: 0.4;
+  margin-top: 100px;
+}

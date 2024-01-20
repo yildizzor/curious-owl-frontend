@@ -1,14 +1,10 @@
 .Navbar {
   background-color: #3a7fe0;
   /* background-color: #123cd2; */
-  background-color: #4582d9bf;
+  background-color: rgba(70, 160, 220, 0.3);
   height: 15vh;
   display: flex;
   align-items: center;
-}
-
-.Navbar img {
-  width: 350px;
 }
 
 .Navbar ul {
@@ -20,6 +16,13 @@
 
 .logo {
   align-self: stretch;
-  border-radius: 20px;
-  padding: 10px;
+  border-radius: 70px;
+  margin: 10px;
+  width: 300px;
+  border: 2px solid blue;
+}
+
+.wisdom-owl {
+  height: 10vh;
+  width: auto;
 }

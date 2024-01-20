@@ -1,9 +1,17 @@
-.home-page img {
- 
-  height: 85vh;
-  opacity: 0.4;
-}
 .home-page {
   display: flex;
   justify-content: center;
+
+  background-image: linear-gradient(
+    rgba(99, 173, 223, 0.2),
+    rgba(17, 10, 232, 0.8)
+  );
+  height: 85vh;
+  border-top: 10px solid white;
+}
+
+.home-page img {
+  width: 70vw;
+  height: 70vh;
+  margin-top: 20px;
 }

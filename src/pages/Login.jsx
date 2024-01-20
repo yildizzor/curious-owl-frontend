@@ -24,8 +24,16 @@ function Login(props) {
         navigate("/profile"); // <== ADD
       })
       .catch((error) => {
-        const errorDescription = error.response.data.message;
-        setErrorMessage(errorDescription);
+        if (error.response) {
+          const { emailError, passwordError, errorMessage } =
+            error.response.data;
+
+          if (emailError) setEmailError(emailError);
+
+          if (passwordError) setPasswordError(passwordError);
+
+          if (errorMessage) setErrorMessage(errorMessage);
+        } else setErrorMessage("Unknown error occurs, please try again");
       });
   };
 
@@ -47,6 +55,8 @@ function Login(props) {
         <button>Login</button>
       </form>
 
+      {emailError && <p className="error-message">{emailError}</p>}
+      {passwordError && <p className="error-message">{passwordError}</p>}
       {errorMessage && <p className="error-message">{errorMessage}</p>}
 
       <p>Do you have an account?</p>
