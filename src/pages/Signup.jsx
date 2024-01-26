@@ -9,6 +9,8 @@ function Signup(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const [country, setCountry] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
   const [errors, setErrors] = useState(undefined);
 
   const navigate = useNavigate();
@@ -16,11 +18,19 @@ function Signup(props) {
   const handleEmail = (event) => setEmail(event.target.value);
   const handlePassword = (event) => setPassword(event.target.value);
   const handleName = (event) => setName(event.target.value);
+  const handleCountry = (event) => setCountry(event.target.value);
+  const handleFileUpload = (event) => setImageUrl(event.target.files[0]);
 
   const handleSignup = (event) => {
     event.preventDefault();
 
-    const requestBody = { email, password, name };
+    const requestBody = new FormData();
+
+    requestBody.append("email", email);
+    requestBody.append("password", password);
+    requestBody.append("name", name);
+    requestBody.append("country", country);
+    requestBody.append("imageUrl", imageUrl);
 
     axios
       .post(`${API_URL}/auth/signup`, requestBody)
@@ -42,6 +52,13 @@ function Signup(props) {
         <h1>Sign Up</h1>
 
         <form onSubmit={handleSignup}>
+          <label>Profile Photo: </label>
+          <input
+            type="file"
+            name="imageUrl"
+            onChange={handleFileUpload}
+          />
+
           <label>Email: </label>
           <input
             type="email"
@@ -59,6 +76,13 @@ function Signup(props) {
           <label>Name: </label>
           <input type="text" name="name" value={name} onChange={handleName} />
 
+          <label>Country: </label>
+          <input
+            type="text"
+            name="country"
+            value={country}
+            onChange={handleCountry}
+          />
           <button>Sign Up</button>
           {errors &&
             Object.keys(errors)
