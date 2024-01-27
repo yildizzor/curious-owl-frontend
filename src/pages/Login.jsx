@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../utils/constants";
+import { AuthContext } from "../context/auth.context";
 
 function Login(props) {
   const [email, setEmail] = useState("");
@@ -10,6 +11,7 @@ function Login(props) {
   const [passwordError, setPasswordError] = useState("");
   const [errorMessage, setErrorMessage] = useState(undefined);
   const navigate = useNavigate();
+  const { storeToken, authenticateUser } = useContext(AuthContext);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -20,7 +22,8 @@ function Login(props) {
         // Request to the server's endpoint `/auth/login` returns a response
         // with the JWT string ->  response.data.authToken
         console.log("JWT token", response.data.authToken);
-
+        storeToken(response.data.authToken);
+        authenticateUser();
         navigate("/profile"); // <== ADD
       })
       .catch((error) => {
