@@ -1,8 +1,8 @@
 .Navbar {
-  background-color: #3a7fe0;
+  background-color: #3a7fe0 !important;
   /* background-color: #123cd2; */
-  background-color: rgba(70, 160, 220, 0.3);
-  height: 15vh;
+  background-color: rgba(70, 160, 220, 0.3) !important;
+  /* height: 15vh; */
   display: flex;
   align-items: center;
 }
@@ -25,4 +25,68 @@
 .wisdom-owl {
   height: 10vh;
   width: auto;
+}
+
+.nav-link {
+  color: blue!important;
+}
+.nav-link:hover {
+  background-color: #f8f9fb !important;
+  border: 2px solid rgb(11, 43, 225);
+  border-radius: 25px;
+}
+
+.logout-button {
+  background-color: lightblue !important;
+  color: blue !important;
+  margin-left: 20px;
+}
+
+.flex-grow {
+  flex-grow: 1;
+}
+
+.align-nav-items {
+  align-items: center !important;
+}
+
+.navbar-toggler {
+  border-color: blue !important;
+}
+
+.navbar-toggler:focus {
+  box-shadow: 0 0 0 0.25em blue !important;
+}
+
+@media (max-width: 992px) {
+  .logo {
+    width: 150px;
+  }
+  .nav-link:hover {
+    border: 1px solid rgb(11, 43, 225);
+    border-radius: 10px;
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+
+  .align-nav-items {
+    align-items: start !important;
+    margin-left: 20px;
+    flex-direction: column;
+    justify-content: start;
+  }
+
+  .user-menu {
+    margin-left: 0;
+    margin-bottom: 10px;
+  }
+  
+  .logout-button {
+    margin-left: 0;
+  }
+  
+  .wisdom-owl {
+    height: 5vh;
+    width: auto;
+  }  
 }

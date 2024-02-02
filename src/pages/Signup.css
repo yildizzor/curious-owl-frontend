@@ -11,3 +11,17 @@
   opacity: 0.4;
   margin-top: 100px;
 }
+
+.avatar-image {
+  height: 300px;
+  min-width: 200px;
+  max-width: 350px;
+  background-color: lightblue;
+  border: solid 1px lightblue;
+  box-shadow: 0 5px 4px lightblue;
+
+}
+
+.error-message {
+  color: red;
+}

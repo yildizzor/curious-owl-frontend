@@ -27,15 +27,17 @@ function Login(props) {
         navigate("/profile"); // <== ADD
       })
       .catch((error) => {
+        console.log(error);
         if (error.response) {
-          const { emailError, passwordError, errorMessage } =
-            error.response.data;
+          console.log(error.response);
+          const backendErrors = error.response.data;
 
-          if (emailError) setEmailError(emailError);
+          if (backendErrors.email) setEmailError(backendErrors.email);
 
-          if (passwordError) setPasswordError(passwordError);
+          if (backendErrors.password) setPasswordError(backendErrors.password);
 
-          if (errorMessage) setErrorMessage(errorMessage);
+          if (backendErrors.message) setErrorMessage(backendErrors.message);
+          
         } else setErrorMessage("Unknown error occurs, please try again");
       });
   };

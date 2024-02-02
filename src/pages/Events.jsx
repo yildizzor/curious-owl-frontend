@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./Event.css";
+import "./Events.css";
 
 function Event() {
   const [selectedItem, setSelectedItem] = useState("All Events");

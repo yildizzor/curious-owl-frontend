@@ -14,8 +14,12 @@ function AuthProviderWrapper(props) {
     localStorage.setItem("authToken", token);
   };
 
+  const getToken = () => {
+    return localStorage.getItem("authToken");
+  };
+
   const authenticateUser = () => {
-    const storedToken = localStorage.getItem("authToken");
+    const storedToken = getToken();
     if (storedToken) {
       axios
         .get(`${API_URL}/auth/verify`, {
@@ -24,6 +28,8 @@ function AuthProviderWrapper(props) {
 
         .then((response) => {
           const user = response.data;
+
+          console.log(user);
 
           setIsLoggedIn(true);
           setisLoading(false);
@@ -61,6 +67,7 @@ function AuthProviderWrapper(props) {
         isLoading,
         user,
         storeToken,
+        getToken,
         authenticateUser,
         logOutUser,
       }}

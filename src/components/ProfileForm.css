@@ -1,0 +1,13 @@
+.personal-form {
+  position: absolute;
+}
+.personal-form-container {
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+.personal-form-bg {
+  height: 70vh;
+  opacity: 0.4;
+  margin-top: 100px;
+}
