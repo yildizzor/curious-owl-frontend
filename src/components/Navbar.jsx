@@ -1,4 +1,4 @@
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import "./Navbar.css";
 import logo from "../assets/navbar-photos/owl-logo.png";
 import wisdomOwl from "../assets/navbar-photos/wisdom-owl.png";
@@ -78,10 +78,7 @@ function NavBar() {
                       delay={{ show: 250, hide: 400 }}
                       overlay={renderTooltip}
                     >
-                      <Button
-                        onClick={logOutUser}
-                        className="logout-button"
-                      >
+                      <Button onClick={logOutUser} className="logout-button">
                         <FontAwesomeIcon icon={faSignOutAlt} />
                       </Button>
                     </OverlayTrigger>

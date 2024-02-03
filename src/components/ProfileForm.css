@@ -3,11 +3,44 @@
 }
 .personal-form-container {
   display: flex;
-  justify-content: center;
+  justify-content: start;
   position: relative;
 }
 .personal-form-bg {
   height: 70vh;
-  opacity: 0.4;
-  margin-top: 100px;
+  opacity: 0.2;
+  margin-top: 35px;
+  overflow: hidden;
+}
+
+.static-text {
+  color: blue;
+}
+
+.avatar-image {
+  height: 100px;
+  min-width: 100px;
+  max-width: 150px;
+  background-color: lightblue;
+  border: solid 1px lightblue;
+  box-shadow: 0 5px 4px lightblue;
+}
+
+.success-message {
+  color: green;
+}
+
+.error-message {
+  color: red;
+}
+
+.upload {
+  opacity: 0;
+}
+
+.upload-label {
+  position: absolute;
+  top: 50%;
+  left: 1rem;
+  transform: translateY(-50%);
 }

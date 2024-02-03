@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../utils/constants";
 import "./Signup.css";
@@ -40,6 +40,7 @@ function Signup(props) {
 
   const handleSignup = (event) => {
     event.preventDefault();
+    setErrors(undefined);
 
     const requestBody = new FormData();
 
@@ -63,53 +64,81 @@ function Signup(props) {
   };
 
   return (
-    <div className="Signup-container m-4">
-      <img className="Signup-bg" src={backgroundImg} alt="background-img" />
+    <div className="personal-form-container m-4 static-text">
+      <img
+        className="personal-form-bg"
+        src={backgroundImg}
+        alt="background-img"
+      />
 
-      <div className="Signup">
-        <h1>Sign Up</h1>
+      <div className="personal-form col-12 col-sm-6 col-lg-4">
+        <form className="row g-2" onSubmit={handleSignup}>
+          <div className="col-8">
+            <div className="col-12">
+              <label>Name</label>
+              <input
+                type="text"
+                name="name"
+                className="form-control"
+                value={name}
+                onChange={handleName}
+              />
+            </div>
+            <div className="col-12">
+              <label>Email</label>
+              <input
+                type="email"
+                name="email"
+                className="form-control"
+                value={email}
+                onChange={handleEmail}
+              />
+            </div>
+          </div>
+          <div className="col-4">
+            {previewUrl && (
+              <img
+                src={previewUrl}
+                className="float-right avatar-image rounded-circle"
+                alt="profile photo"
+              ></img>
+            )}
+          </div>
+          <div className="col-6"></div>
+          <div className="col-6">
+            <input
+              type="file"
+              className="form-control float-right"
+              name="imageUrl"
+              onChange={handleFileUpload}
+            />
+          </div>
+          <div className="col-12">
+            <label className="form-label">Password</label>
+            <input
+              type="password"
+              name="password"
+              className="form-control"
+              value={password}
+              onChange={handlePassword}
+            />
+          </div>
+          <div className="col-12">
+            <label className="form-label">Country</label>
+            <input
+              type="text"
+              name="country"
+              className="form-control mb-3"
+              value={country}
+              onChange={handleCountry}
+            />
+          </div>
+          <div className="col-12">
+            <button type="submit" className="btn btn-primary">
+              Signup
+            </button>
+          </div>
 
-        <form className="row g-4" onSubmit={handleSignup}>
-          <label>Profile Photo: </label>
-          <input type="file" name="imageUrl" onChange={handleFileUpload} />
-          {previewUrl && (
-            <img src={previewUrl} height="300px" alt="profile photo"></img>
-          )}
-
-          <label>Email: </label>
-          <input
-            type="email"
-            name="email"
-            className="form-control"
-            value={email}
-            onChange={handleEmail}
-          />
-          <label>Password: </label>
-          <input
-            type="password"
-            name="password"
-            className="form-control"
-            value={password}
-            onChange={handlePassword}
-          />
-          <label>Name: </label>
-          <input
-            type="text"
-            name="name"
-            className="form-control"
-            value={name}
-            onChange={handleName}
-          />
-
-          <label>Country: </label>
-          <input
-            type="text"
-            name="country"
-            className="form-control"
-            value={country}
-            onChange={handleCountry}
-          />
-          <button className="btn btn-primary">Sign Up</button>
           {errors &&
             Object.keys(errors)
               .filter((element) => {
@@ -124,8 +153,16 @@ function Signup(props) {
                 );
               })}
 
-          <p>Do you have an account?</p>
-          <Link to={"/login"}> Login</Link>
+          <div className="col-12 mb-5">
+            <p>Do you have an account?</p>
+            <button
+              type="button"
+              className="btn btn-outline-primary"
+              onClick={() => navigate("/login")}
+            >
+              Login
+            </button>
+          </div>
         </form>
       </div>
     </div>

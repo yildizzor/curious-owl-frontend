@@ -1,8 +1,10 @@
 import { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../utils/constants";
 import { AuthContext } from "../context/auth.context";
+import backgroundImg from "../assets/owl1.jpeg";
+import "./Login.css";
 
 function Login(props) {
   const [email, setEmail] = useState("");
@@ -10,11 +12,17 @@ function Login(props) {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [errorMessage, setErrorMessage] = useState(undefined);
-  const navigate = useNavigate();
   const { storeToken, authenticateUser } = useContext(AuthContext);
+
+  const navigate = useNavigate();
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    setEmailError("");
+    setPasswordError("");
+    setErrorMessage(undefined);
+
     const requestBody = { email, password };
     axios
       .post(`${API_URL}/auth/login`, requestBody)
@@ -29,15 +37,11 @@ function Login(props) {
       .catch((error) => {
         console.log(error);
         if (error.response) {
-          console.log(error.response);
           const backendErrors = error.response.data;
 
           if (backendErrors.email) setEmailError(backendErrors.email);
-
           if (backendErrors.password) setPasswordError(backendErrors.password);
-
           if (backendErrors.message) setErrorMessage(backendErrors.message);
-          
         } else setErrorMessage("Unknown error occurs, please try again");
       });
   };
@@ -46,26 +50,56 @@ function Login(props) {
   const handlePassword = (event) => setPassword(event.target.value);
 
   return (
-    <div className="login-container">
-      <form onSubmit={handleSubmit}>
-        <label>Email: </label>
-        <input type="email" name="email" value={email} onChange={handleEmail} />
-        <label>Password: </label>
-        <input
-          type="password"
-          name="password"
-          value={password}
-          onChange={handlePassword}
-        />
-        <button>Login</button>
-      </form>
+    <div className="login-form-container m-4 static-text">
+      <img className="login-form-bg" src={backgroundImg} alt="background-img" />
 
-      {emailError && <p className="error-message">{emailError}</p>}
-      {passwordError && <p className="error-message">{passwordError}</p>}
-      {errorMessage && <p className="error-message">{errorMessage}</p>}
+      <div className="login-form col-12 col-sm-6 col-lg-4">
+        <form className="row g-2" onSubmit={handleSubmit}>
+          <div className="col-12">
+            <label>Email</label>
+            <input
+              type="email"
+              name="email"
+              className="form-control"
+              value={email}
+              onChange={handleEmail}
+            />
+          </div>
 
-      <p>Do you have an account?</p>
-      <Link to={"/signup"}>Sign Up</Link>
+          <div className="col-12">
+            <label className="form-label">Password</label>
+            <input
+              type="password"
+              name="password"
+              className="form-control"
+              value={password}
+              onChange={handlePassword}
+            />
+          </div>
+          <div className="col-12 mt-5">
+            <button type="submit" className="btn btn-primary">
+              Login
+            </button>
+          </div>
+
+          {emailError && <div className="error-message">{emailError}</div>}
+          {passwordError && (
+            <div className="error-message">{passwordError}</div>
+          )}
+          {errorMessage && <div className="error-message">{errorMessage}</div>}
+
+          <div className="col-12 mb-5">
+            <p>Do you have already an account?</p>
+            <button
+              type="button"
+              className="btn btn-outline-primary"
+              onClick={() => navigate("/signup")}
+            >
+              Sign Up
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

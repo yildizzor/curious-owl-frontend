@@ -1,25 +1,20 @@
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
-import Row from "react-bootstrap/Row";
-
 import { API_URL } from "../utils/constants";
-import "./ProfileForm.css";
 import backgroundImg from "../assets/owl1.jpeg";
-import avatar from "../assets/avatar.png";
+import { AuthContext } from "../context/auth.context";
+import "./ProfileForm.css";
 
 function ProfileForm() {
   const { user, getToken, storeToken, authenticateUser } =
     useContext(AuthContext);
 
-  const [validated, setValidated] = useState(false);
   const [password, setPassword] = useState("");
   const [country, setCountry] = useState(user.country);
   const [imageUrl, setImageUrl] = useState(user.imageUrl);
   const [errors, setErrors] = useState(undefined);
   const [previewUrl, setPreviewUrl] = useState(user.imageUrl);
+  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     console.log(imageUrl);
@@ -40,19 +35,10 @@ function ProfileForm() {
   const handleCountry = (event) => setCountry(event.target.value);
   const handleFileUpload = (event) => setImageUrl(event.target.files[0]);
 
-  const validateForm = (event) => {
-    const form = event.currentTarget;
-
-    if (form.checkValidity() === false) {
-      event.stopPropagation();
-    }
-
-    setValidated(true);
-  };
-
-  const submitProfileUpdate = (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
-    validateForm(event);
+    setSuccess(false);
+    setErrors(undefined);
 
     const requestBody = new FormData();
 
@@ -69,8 +55,10 @@ function ProfileForm() {
       .then((response) => {
         storeToken(response.data.authToken);
         authenticateUser();
+        setSuccess(true);
       })
       .catch((error) => {
+        setSuccess(false);
         if (error.response) {
           setErrors(error.response.data);
         }
@@ -78,77 +66,88 @@ function ProfileForm() {
   };
 
   return (
-    <Form noValidate validated={validated} onSubmit={submitProfileUpdate}>
-      <Row className="mb-3" md="6">
-        <Form.Group md="4" controlId="validationCustom01">
-          <Form.Label>First name</Form.Label>
-          <Form.Control
-            required
-            type="text"
-            placeholder="First name"
-            defaultValue="Mark"
-          />
-          <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-        </Form.Group>
-        <Form.Group md="4" controlId="validationCustom02">
-          <Form.Label>Last name</Form.Label>
-          <Form.Control
-            required
-            type="text"
-            placeholder="Last name"
-            defaultValue="Otto"
-          />
-          <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-        </Form.Group>
-        <Form.Group md="4" controlId="validationCustomUsername">
-          <Form.Label>Username</Form.Label>
-          <InputGroup hasValidation>
-            <InputGroup.Text id="inputGroupPrepend">@</InputGroup.Text>
-            <Form.Control
-              type="text"
-              placeholder="Username"
-              aria-describedby="inputGroupPrepend"
-              required
+    <div className="personal-form-container m-4 static-text">
+      <img
+        className="personal-form-bg"
+        src={backgroundImg}
+        alt="background-img"
+      />
+
+      <div className="personal-form col-12 col-sm-6 col-lg-4">
+        <form className="row g-2" onSubmit={handleSubmit}>
+          <div className="col-8">
+            <div className="col-12">
+              <label className="form-label">Name: {user.name}</label>
+            </div>
+            <div className="col-12">
+              <label className="form-label">Email: {user.email}</label>
+            </div>
+          </div>
+          <div className="col-4">
+            {previewUrl && (
+              <img
+                src={previewUrl}
+                className="float-right avatar-image rounded-circle"
+                alt="profile photo"
+              ></img>
+            )}
+          </div>
+          <div className="col-3"></div>
+          <div className="col-9">
+            <input
+              type="file"
+              className="form-control"
+              name="imageUrl"
+              onChange={handleFileUpload}
             />
-            <Form.Control.Feedback type="invalid">
-              Please choose a username.
-            </Form.Control.Feedback>
-          </InputGroup>
-        </Form.Group>
-      </Row>
-      <Row className="mb-3">
-        <Form.Group md="6" controlId="validationCustom03">
-          <Form.Label>City</Form.Label>
-          <Form.Control type="text" placeholder="City" required />
-          <Form.Control.Feedback type="invalid">
-            Please provide a valid city.
-          </Form.Control.Feedback>
-        </Form.Group>
-        <Form.Group md="3" controlId="validationCustom04">
-          <Form.Label>State</Form.Label>
-          <Form.Control type="text" placeholder="State" required />
-          <Form.Control.Feedback type="invalid">
-            Please provide a valid state.
-          </Form.Control.Feedback>
-        </Form.Group>
-        <Form.Group md="3" controlId="validationCustom05">
-          <Form.Label>Zip</Form.Label>
-          <Form.Control type="text" placeholder="Zip" required />
-          <Form.Control.Feedback type="invalid">
-            Please provide a valid zip.
-          </Form.Control.Feedback>
-        </Form.Group>
-      </Row>
-      <Form.Group className="mb-3">
-        <Form.Check
-          required
-          label="Agree to terms and conditions"
-          feedback="You must agree before submitting."
-          feedbackType="invalid"
-        />
-      </Form.Group>
-      <Button type="submit">Submit form</Button>
-    </Form>
+          </div>
+          <div className="col-12">
+            <label className="form-label">Password</label>
+            <input
+              type="password"
+              name="password"
+              className="form-control"
+              value={password}
+              onChange={handlePassword}
+            />
+          </div>
+          <div className="col-12">
+            <label className="form-label">Country</label>
+            <input
+              type="text"
+              name="country"
+              className="form-control mb-3"
+              value={country}
+              onChange={handleCountry}
+            />
+          </div>
+          <div className="col-12">
+            <button type="submit" className="btn btn-primary">
+              Update Profile
+            </button>
+          </div>
+
+          {errors &&
+            Object.keys(errors)
+              .filter((element) => {
+                const value = errors[element];
+                return value !== undefined && value !== null && value !== "";
+              })
+              .map((element) => {
+                return (
+                  <div key={element} className="error-message">
+                    {errors[element]}
+                  </div>
+                );
+              })}
+          {success && (
+            <div className="success-message">
+              Profile is successfully updated
+            </div>
+          )}
+        </form>
+      </div>
+    </div>
   );
 }
 

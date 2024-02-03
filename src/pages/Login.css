@@ -1,0 +1,18 @@
+.login-form {
+  position: absolute;
+}
+.login-form-container {
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+.login-form-bg {
+  height: 70vh;
+  opacity: 0.2;
+  margin-top: 35px;
+  overflow: hidden;
+}
+
+.error-message {
+  color: red;
+}

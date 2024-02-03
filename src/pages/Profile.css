@@ -9,7 +9,7 @@
 .personal-form-bg {
   height: 70vh;
   opacity: 0.2;
-  margin-top: 100px;
+  margin-top: 35px;
   overflow: hidden;
 }
 
@@ -18,13 +18,12 @@
 }
 
 .avatar-image {
-  height: 300px;
-  min-width: 200px;
-  max-width: 350px;
+  height: 100px;
+  min-width: 100px;
+  max-width: 150px;
   background-color: lightblue;
   border: solid 1px lightblue;
   box-shadow: 0 5px 4px lightblue;
-
 }
 
 .success-message {
@@ -44,10 +43,4 @@
   top: 50%;
   left: 1rem;
   transform: translateY(-50%);
-}
-
-@media (max-width: 992px) {
-  .avatar-image {
-    height: 200px;
-  }
 }

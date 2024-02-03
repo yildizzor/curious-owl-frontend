@@ -28,7 +28,7 @@
 }
 
 .nav-link {
-  color: blue!important;
+  color: blue !important;
 }
 .nav-link:hover {
   background-color: #f8f9fb !important;
@@ -80,13 +80,13 @@
     margin-left: 0;
     margin-bottom: 10px;
   }
-  
+
   .logout-button {
     margin-left: 0;
   }
-  
+
   .wisdom-owl {
     height: 5vh;
     width: auto;
-  }  
+  }
 }
