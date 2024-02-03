@@ -1,9 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import "./Sidebar.css";
+import useWindowDimensions from "../hooks/useWindowDimensions";
 
 function Sidebar({ items, selectedItem, setSelectedItem, children }) {
+  const [collapse, setCollapse] = useState(false);
+  const { width } = useWindowDimensions();
+  const isLargeScreen = width >= 992;
+
   const handleEventFilter = (filterType) => {
     setSelectedItem(filterType);
   };
@@ -18,43 +23,44 @@ function Sidebar({ items, selectedItem, setSelectedItem, children }) {
     return classNames;
   };
 
+  useEffect(() => {
+    console.log("use effect")
+    setCollapse(!isLargeScreen);
+  }, [isLargeScreen]);
+
+  const handleSideBarMenu = (event) => {
+    event.stopPropagation();
+    if (isLargeScreen) {
+      setCollapse(false);
+    } else {
+      setCollapse((prev) => !prev);
+    }
+  };
+
   return (
     <div className="container-fluid h-100 p-0">
       <div className="row h-100">
         <div className="col-lg-3 col-12 position-relative">
           <nav className="sidebar">
-            <div className="position-sticky d-none d-lg-block">
+            <div className={"position-sticky"} onClick={handleSideBarMenu}>
               <div className="list-group list-group-flush mx-3 mt-4">
-                {items.map((element) => {
-                  return (
-                    <li
-                      key={element.type}
-                      className={getClassNames(element.type)}
-                      onClick={() => handleEventFilter(element.type)}
-                    >
-                      <FontAwesomeIcon icon={element.icon} className="mr-5" />
-                      <span> {element.type}</span>
-                    </li>
-                  );
-                })}
+                {items
+                  .filter((elem) =>
+                    collapse ? elem.type === selectedItem : true
+                  )
+                  .map((element) => {
+                    return (
+                      <li
+                        key={element.type}
+                        className={getClassNames(element.type)}
+                        onClick={() => handleEventFilter(element.type)}
+                      >
+                        <FontAwesomeIcon icon={element.icon} className="mr-5" />
+                        <span> {element.type}</span>
+                      </li>
+                    );
+                  })}
               </div>
-            </div>
-
-            <div className="d-lg-none">
-              <select
-                className="form-control bg-primary text-white"
-                value={selectedItem}
-                onChange={(e) => setSelectedItem(e.target.value)}
-              >
-                {items.map((element) => {
-                  return (
-                    <option key={element.type} value={element.type}>
-                      <FontAwesomeIcon icon={element.icon} className="mr-5" />
-                      <span> {element.type}</span>
-                    </option>
-                  );
-                })}
-              </select>
             </div>
           </nav>
         </div>
