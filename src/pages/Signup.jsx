@@ -64,14 +64,14 @@ function Signup(props) {
   };
 
   return (
-    <div className="personal-form-container m-4 static-text">
+    <div className="signup-form-container m-4 static-text">
       <img
-        className="personal-form-bg"
+        className="signup-form-bg"
         src={backgroundImg}
         alt="background-img"
       />
 
-      <div className="personal-form col-12 col-sm-6 col-lg-4">
+      <div className="signup-form col-12 col-sm-6 col-lg-4">
         <form className="row g-2" onSubmit={handleSignup}>
           <div className="col-8">
             <div className="col-12">

@@ -1,12 +1,12 @@
-.personal-form {
+.signup-form {
   position: absolute;
 }
-.personal-form-container {
+.signup-form-container {
   display: flex;
   justify-content: center;
   position: relative;
 }
-.personal-form-bg {
+.signup-form-bg {
   height: 70vh;
   opacity: 0.2;
   margin-top: 35px;

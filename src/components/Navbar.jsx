@@ -39,6 +39,9 @@ function NavBar() {
               <NavLink to="/" className="nav-link">
                 Home
               </NavLink>
+              <NavLink to="/events" className="nav-link">
+                Events
+              </NavLink>
               {!isLoggedIn && (
                 <>
                   <NavLink to="/signup" className="nav-link">
@@ -56,10 +59,6 @@ function NavBar() {
                   </NavLink>
                 </>
               )}
-              <NavLink to="/events" className="nav-link">
-                Events
-              </NavLink>
-
               {isLoggedIn && (
                 <>
                   <div
