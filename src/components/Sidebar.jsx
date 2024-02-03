@@ -20,7 +20,7 @@ function Sidebar({ items, selectedItem, setSelectedItem, children }) {
     return classNames;
   };
   return (
-    <div className="container-fluid h-100">
+    <div className="container-fluid h-100 p-0">
       <div className="row h-100">
         <div className="col-lg-3 col-12 position-relative">
           <nav className="sidebar">

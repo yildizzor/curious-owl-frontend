@@ -4,6 +4,7 @@ import Sidebar from "../components/Sidebar";
 
 import { faUserEdit, faUserAlt } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
+import ShowProfile from "../components/ShowProfile";
 
 const sidebarMenu = [
   { type: "Show Profile", icon: faUserAlt },
@@ -20,7 +21,7 @@ function Profile(props) {
         selectedItem={selectedItem}
         setSelectedItem={setSelectedItem}
       >
-        {selectedItem == sidebarMenu[0].type && <div>Edit Form</div>}
+        {selectedItem == sidebarMenu[0].type && <ShowProfile />}
         {selectedItem == sidebarMenu[1].type && <ProfileForm />}
       </Sidebar>
     </>

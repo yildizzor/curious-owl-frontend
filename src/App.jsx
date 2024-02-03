@@ -11,7 +11,7 @@ import IsAnon from "./components/IsAnon";
 
 function App() {
   return (
-    <div>
+    <>
       <NavBar />
       <Routes>
         <Route path="/" element={<HomePage />} />
@@ -41,7 +41,7 @@ function App() {
         />
         <Route path="/events" element={<Event />} />
       </Routes>
-    </div>
+    </>
   );
 }
 
