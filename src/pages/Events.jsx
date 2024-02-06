@@ -5,31 +5,16 @@ import {
   faBuildingColumns,
   faBook,
   faWheatAlt,
+  faUserEdit,
 } from "@fortawesome/free-solid-svg-icons";
 
 import "./Events.css";
-import Sidebar from "../components/Sidebar";
-import { useState } from "react";
+import EventSidebar from "../components/EventSidebar";
 
-const sidebarMenu = [
-  { type: "All Events", icon: faCalendar },
-  { type: "Concerts", icon: faMusic },
-  { type: "Theaters", icon: faTheaterMasks },
-  { type: "Museums", icon: faBuildingColumns },
-  { type: "Books", icon: faBook },
-  { type: "Restaurants", icon: faWheatAlt },
-];
-
-function Event() {
-  const [selectedItem, setSelectedItem] = useState(sidebarMenu[0].type);
-
+function Events() {
   return (
-    <Sidebar
-      items={sidebarMenu}
-      selectedItem={selectedItem}
-      setSelectedItem={setSelectedItem}
-    />
+    <EventSidebar pageName="Events"/>
   );
 }
 
-export default Event;
+export default Events;

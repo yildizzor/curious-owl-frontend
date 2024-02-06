@@ -3,7 +3,7 @@
 }
 .personal-form-container {
   display: flex;
-  justify-content: center;
+  justify-content: start;
   position: relative;
 }
 .personal-form-bg {

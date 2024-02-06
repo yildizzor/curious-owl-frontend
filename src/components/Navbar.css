@@ -26,6 +26,10 @@
   height: 10vh;
   width: auto;
 }
+.wisdom-owl-sm {
+display: none;
+
+}
 
 .nav-link {
   color: blue !important;
@@ -60,13 +64,22 @@
 
 @media (max-width: 992px) {
   .logo {
-    width: 150px;
+    width: 170px;
+  }
+  .wisdom-owl-sm {
+    display: inline;
+    height: 5vh;
+    width: auto;
   }
   .nav-link:hover {
     border: 1px solid rgb(11, 43, 225);
     border-radius: 10px;
     padding-left: 5px;
     padding-right: 5px;
+  }
+
+  .navbar-toggler {
+    margin-right: 10px;
   }
 
   .align-nav-items {
@@ -86,7 +99,6 @@
   }
 
   .wisdom-owl {
-    height: 5vh;
-    width: auto;
+    display: none;
   }
 }

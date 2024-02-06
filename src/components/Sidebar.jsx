@@ -1,16 +1,21 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 import "./Sidebar.css";
-import useWindowDimensions from "../hooks/useWindowDimensions";
+import { useNavigate } from "react-router-dom";
 
 function Sidebar({ items, selectedItem, setSelectedItem, children }) {
   const [collapse, setCollapse] = useState(false);
-  const { width } = useWindowDimensions();
-  const isLargeScreen = width >= 992;
+
+  const navigate = useNavigate();
 
   const handleEventFilter = (filterType) => {
     setSelectedItem(filterType);
+    const item = items.filter((elem) => elem.type === filterType)[0];
+
+    if (!collapse && item.link) {
+      console.log("item.link");
+      navigate(item.link);
+    }
   };
 
   const getClassNames = (type) => {
@@ -23,17 +28,12 @@ function Sidebar({ items, selectedItem, setSelectedItem, children }) {
     return classNames;
   };
 
-  useEffect(() => {
-    console.log("use effect")
-    setCollapse(!isLargeScreen);
-  }, [isLargeScreen]);
-
   const handleSideBarMenu = (event) => {
     event.stopPropagation();
-    if (isLargeScreen) {
+    if (window.innerWidth >= 992) {
       setCollapse(false);
     } else {
-      setCollapse((prev) => !prev);
+      setCollapse(!collapse);
     }
   };
 

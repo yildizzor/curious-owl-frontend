@@ -48,7 +48,6 @@ function Signup(props) {
     requestBody.append("password", password);
     requestBody.append("name", name);
     requestBody.append("country", country);
-
     requestBody.append("imageUrl", imageUrl);
 
     axios

@@ -30,7 +30,9 @@ function NavBar() {
       <Navbar expand="lg" className="Navbar">
         <Container fluid className="d-flex justify-content-between">
           <Navbar.Brand href="/">
-            <img className="logo" src={logo}></img>
+            <Image className="logo" src={logo} />
+            <Image className="wisdom-owl-sm" src={wisdomOwl} />
+            <Image className="wisdom-owl-sm" src={wisdomOwl} />
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
