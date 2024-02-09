@@ -1,10 +1,6 @@
-import React from "react";
-import amsterdam from "../assets/homepage-photos/amsterdam.jpeg";
-import keukenhof from "../assets/homepage-photos/keukenhof.jpeg";
-import vatikan from "../assets/homepage-photos/vatikan.webp";
-import venice from "../assets/homepage-photos/venice.jpeg";
-import owl from "../assets/owl1.jpeg";
+import { amsterdam, vatikan, venice, keukenhof } from "../utils/constants";
 import "./HomePage.css";
+amsterdam;
 import { Carousel } from "react-bootstrap";
 
 function HomePage() {

@@ -2,19 +2,23 @@ import "./App.css";
 import NavBar from "./components/Navbar";
 import { Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
-import Signup from "./pages/Signup";
-import Login from "./pages/Login";
-import Profile from "./pages/Profile";
-import Events from "./pages/Events";
-import IsPrivate from "./components/IsPrivate";
-import IsAnon from "./components/IsAnon";
-import OneConcert from "./pages/OneConcert";
-import Concerts from "./pages/Concerts";
-import Theaters from "./pages/Theaters";
-import Museums from "./pages/Museums";
-import Books from "./pages/Books";
-import Restaurants from "./pages/Restaurants";
+import Signup from "./pages/authPages/Signup";
+import Login from "./pages/authPages/Login";
+import Profile from "./pages/authPages/Profile";
+import Events from "./pages/eventListPages/Events";
+import IsPrivate from "./components/common/IsPrivate";
+import IsAnon from "./components/common/IsAnon";
+import Concerts from "./pages/eventListPages/Concerts";
+import OneConcert from "./pages/oneEventPages/OneConcert";
+import Theaters from "./pages/eventListPages/Theaters";
+import OneTheater from "./pages/oneEventPages/OneTheater";
+import Museums from "./pages/eventListPages/Museums";
+import OneMuseum from "./pages/oneEventPages/OneMuseum";
+import Books from "./pages/eventListPages/Books";
+import Restaurants from "./pages/eventListPages/Restaurants";
 import AddEvent from "./pages/AddEvent";
+import OneRestaurant from "./pages/oneEventPages/OneRestaurant";
+import OneBook from "./pages/oneEventPages/OneBook";
 
 function App() {
   return (
@@ -51,9 +55,13 @@ function App() {
         <Route path="/concerts" element={<Concerts />} />
         <Route path="/concerts/:concertId" element={<OneConcert />} />
         <Route path="/theaters" element={<Theaters />} />
+        <Route path="/theaters/:theaterId" element={<OneTheater />} />
         <Route path="/museums" element={<Museums />} />
+        <Route path="/museums/:museumId" element={<OneMuseum />} />
         <Route path="/books" element={<Books />} />
+        <Route path="/books/:bookId" element={<OneBook />} />
         <Route path="/restaurants" element={<Restaurants />} />
+        <Route path="/restaurants/:restaurantId" element={<OneRestaurant />} />
         <Route path="/addevent" element={<AddEvent />} />
       </Routes>
     </>

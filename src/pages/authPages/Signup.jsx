@@ -1,24 +1,24 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { API_URL } from "../utils/constants";
-import backgroundImg from "../assets/owl1.jpeg";
-import { AuthContext } from "../context/auth.context";
-import "./ProfileForm.css";
+import { API_URL } from "../../utils/constants";
+import "./Signup.css";
+import { backgroundImg, avatar } from "../../utils/constants";
 
-function ProfileForm() {
-  const { user, getToken, storeToken, authenticateUser } =
-    useContext(AuthContext);
-
+function Signup(props) {
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [country, setCountry] = useState(user.country);
-  const [imageUrl, setImageUrl] = useState(user.imageUrl);
+  const [name, setName] = useState("");
+  const [country, setCountry] = useState("");
+  const [imageUrl, setImageUrl] = useState(avatar);
   const [errors, setErrors] = useState(undefined);
-  const [previewUrl, setPreviewUrl] = useState(user.imageUrl);
-  const [success, setSuccess] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState(avatar);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(imageUrl);
-    if (typeof imageUrl === "string") {
+    if (imageUrl === avatar) {
+      setPreviewUrl(avatar);
       return;
     }
 
@@ -31,34 +31,30 @@ function ProfileForm() {
     };
   }, [imageUrl]);
 
+  const handleEmail = (event) => setEmail(event.target.value);
   const handlePassword = (event) => setPassword(event.target.value);
+  const handleName = (event) => setName(event.target.value);
   const handleCountry = (event) => setCountry(event.target.value);
   const handleFileUpload = (event) => setImageUrl(event.target.files[0]);
 
-  const handleSubmit = (event) => {
+  const handleSignup = (event) => {
     event.preventDefault();
-    setSuccess(false);
     setErrors(undefined);
 
     const requestBody = new FormData();
 
-    requestBody.append("email", user.email);
+    requestBody.append("email", email);
     requestBody.append("password", password);
+    requestBody.append("name", name);
     requestBody.append("country", country);
     requestBody.append("imageUrl", imageUrl);
 
-    console.log(requestBody, country);
     axios
-      .put(`${API_URL}/api/user`, requestBody, {
-        headers: { Authorization: `Bearer ${getToken()}` },
-      })
+      .post(`${API_URL}/auth/signup`, requestBody)
       .then((response) => {
-        storeToken(response.data.authToken);
-        authenticateUser();
-        setSuccess(true);
+        navigate("/login");
       })
       .catch((error) => {
-        setSuccess(false);
         if (error.response) {
           setErrors(error.response.data);
         }
@@ -66,21 +62,35 @@ function ProfileForm() {
   };
 
   return (
-    <div className="personal-form-container m-4 static-text">
+    <div className="signup-form-container m-4 static-text">
       <img
-        className="personal-form-bg"
+        className="signup-form-bg"
         src={backgroundImg}
         alt="background-img"
       />
 
-      <div className="personal-form col-12 col-sm-6 col-lg-4">
-        <form className="row g-2" onSubmit={handleSubmit}>
+      <div className="signup-form col-12 col-sm-6 col-lg-4">
+        <form className="row g-2" onSubmit={handleSignup}>
           <div className="col-8">
             <div className="col-12">
-              <label className="form-label">Name: {user.name}</label>
+              <label>Name</label>
+              <input
+                type="text"
+                name="name"
+                className="form-control"
+                value={name}
+                onChange={handleName}
+              />
             </div>
             <div className="col-12">
-              <label className="form-label">Email: {user.email}</label>
+              <label>Email</label>
+              <input
+                type="email"
+                name="email"
+                className="form-control"
+                value={email}
+                onChange={handleEmail}
+              />
             </div>
           </div>
           <div className="col-4">
@@ -92,11 +102,11 @@ function ProfileForm() {
               ></img>
             )}
           </div>
-          <div className="col-3"></div>
-          <div className="col-9">
+          <div className="col-6"></div>
+          <div className="col-6">
             <input
               type="file"
-              className="form-control"
+              className="form-control float-right"
               name="imageUrl"
               onChange={handleFileUpload}
             />
@@ -123,7 +133,7 @@ function ProfileForm() {
           </div>
           <div className="col-12">
             <button type="submit" className="btn btn-primary">
-              Update Profile
+              Signup
             </button>
           </div>
 
@@ -140,15 +150,21 @@ function ProfileForm() {
                   </div>
                 );
               })}
-          {success && (
-            <div className="success-message">
-              Profile is successfully updated
-            </div>
-          )}
+
+          <div className="col-12 mb-5">
+            <p>Do you have an account?</p>
+            <button
+              type="button"
+              className="btn btn-outline-primary"
+              onClick={() => navigate("/login")}
+            >
+              Login
+            </button>
+          </div>
         </form>
       </div>
     </div>
   );
 }
 
-export default ProfileForm;
+export default Signup;

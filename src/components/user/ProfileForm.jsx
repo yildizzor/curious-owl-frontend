@@ -1,25 +1,26 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { API_URL } from "../utils/constants";
-import "./Signup.css";
-import backgroundImg from "../assets/owl1.jpeg";
-import avatar from "../assets/avatar.png";
+import { API_URL } from "../../utils/constants";
+import { AuthContext } from "../../context/auth.context";
+import "./ProfileForm.css";
+import ButtonStatus from "../common/ButtonStatus";
+import { backgroundImg } from "../../utils/constants";
 
-function Signup(props) {
-  const [email, setEmail] = useState("");
+function ProfileForm() {
+  const { user, getToken, storeToken, authenticateUser } =
+    useContext(AuthContext);
+
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
-  const [country, setCountry] = useState("");
-  const [imageUrl, setImageUrl] = useState(avatar);
+  const [country, setCountry] = useState(user.country);
+  const [imageUrl, setImageUrl] = useState(user.imageUrl);
   const [errors, setErrors] = useState(undefined);
-  const [previewUrl, setPreviewUrl] = useState(avatar);
-
-  const navigate = useNavigate();
+  const [previewUrl, setPreviewUrl] = useState(user.imageUrl);
+  const [success, setSuccess] = useState(false);
+  const [isAxiosInProgress, setIsAxiosInProgress] = useState(false);
 
   useEffect(() => {
-    if (imageUrl === avatar) {
-      setPreviewUrl(avatar);
+    console.log(imageUrl);
+    if (typeof imageUrl === "string") {
       return;
     }
 
@@ -32,66 +33,60 @@ function Signup(props) {
     };
   }, [imageUrl]);
 
-  const handleEmail = (event) => setEmail(event.target.value);
   const handlePassword = (event) => setPassword(event.target.value);
-  const handleName = (event) => setName(event.target.value);
   const handleCountry = (event) => setCountry(event.target.value);
   const handleFileUpload = (event) => setImageUrl(event.target.files[0]);
 
-  const handleSignup = (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
+    setSuccess(false);
     setErrors(undefined);
 
     const requestBody = new FormData();
 
-    requestBody.append("email", email);
+    requestBody.append("email", user.email);
     requestBody.append("password", password);
-    requestBody.append("name", name);
     requestBody.append("country", country);
     requestBody.append("imageUrl", imageUrl);
 
+    console.log(requestBody, country);
+    setIsAxiosInProgress(true);
     axios
-      .post(`${API_URL}/auth/signup`, requestBody)
+      .put(`${API_URL}/api/user`, requestBody, {
+        headers: { Authorization: `Bearer ${getToken()}` },
+      })
       .then((response) => {
-        navigate("/login");
+        storeToken(response.data.authToken);
+        setSuccess(true);
+        setTimeout(() => authenticateUser(), 2000);
       })
       .catch((error) => {
+        setSuccess(false);
         if (error.response) {
           setErrors(error.response.data);
         }
+      })
+      .finally(() => {
+        setIsAxiosInProgress(false);
       });
   };
 
   return (
-    <div className="signup-form-container m-4 static-text">
+    <div className="personal-form-container m-4 col-lg-9 col-12 static-text">
       <img
-        className="signup-form-bg"
+        className="personal-form-bg"
         src={backgroundImg}
         alt="background-img"
       />
 
-      <div className="signup-form col-12 col-sm-6 col-lg-4">
-        <form className="row g-2" onSubmit={handleSignup}>
+      <div className="personal-form col-10 col-sm-9 col-md-8 col-xl-7">
+        <form className="row g-2" onSubmit={handleSubmit}>
           <div className="col-8">
             <div className="col-12">
-              <label>Name</label>
-              <input
-                type="text"
-                name="name"
-                className="form-control"
-                value={name}
-                onChange={handleName}
-              />
+              <label className="form-label">Name: {user.name}</label>
             </div>
             <div className="col-12">
-              <label>Email</label>
-              <input
-                type="email"
-                name="email"
-                className="form-control"
-                value={email}
-                onChange={handleEmail}
-              />
+              <label className="form-label">Email: {user.email}</label>
             </div>
           </div>
           <div className="col-4">
@@ -103,11 +98,11 @@ function Signup(props) {
               ></img>
             )}
           </div>
-          <div className="col-6"></div>
-          <div className="col-6">
+          <div className="col-3"></div>
+          <div className="col-9">
             <input
               type="file"
-              className="form-control float-right"
+              className="form-control"
               name="imageUrl"
               onChange={handleFileUpload}
             />
@@ -133,9 +128,11 @@ function Signup(props) {
             />
           </div>
           <div className="col-12">
-            <button type="submit" className="btn btn-primary">
-              Signup
-            </button>
+            <ButtonStatus
+              inProgress={isAxiosInProgress}
+              text="Update Profile"
+              inProgressText="Updating Profile..."
+            />
           </div>
 
           {errors &&
@@ -151,21 +148,15 @@ function Signup(props) {
                   </div>
                 );
               })}
-
-          <div className="col-12 mb-5">
-            <p>Do you have an account?</p>
-            <button
-              type="button"
-              className="btn btn-outline-primary"
-              onClick={() => navigate("/login")}
-            >
-              Login
-            </button>
-          </div>
+          {success && (
+            <div className="success-message">
+              Profile is successfully updated
+            </div>
+          )}
         </form>
       </div>
     </div>
   );
 }
 
-export default Signup;
+export default ProfileForm;

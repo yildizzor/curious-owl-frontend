@@ -26,14 +26,6 @@
   box-shadow: 0 5px 4px lightblue;
 }
 
-.success-message {
-  color: green;
-}
-
-.error-message {
-  color: red;
-}
-
 .upload {
   opacity: 0;
 }

@@ -1,0 +1,23 @@
+.underline-input-container {
+  position: relative;
+}
+
+.underline-textarea {
+  resize: none !important; /* Prevent resizing of the textarea */
+}
+
+.underline-input,
+.underline-textarea {
+  border: none !important;
+  border-radius: 0 !important;
+  border-bottom: 1px solid blue !important; /* You can adjust the color as needed */
+  outline: none !important; /* Remove the default focus border */
+  padding-bottom: 4px !important; /* Adjust padding bottom to match line thickness */
+}
+
+/* Optional: Animation for underline */
+.underline-input:focus,
+.underline-textarea:focus {
+  border-bottom: 2px solid blue !important; /* Adjust the color and thickness as needed */
+  transition: border-bottom 0.3s ease !important; /* Add transition for smoother effect */
+}

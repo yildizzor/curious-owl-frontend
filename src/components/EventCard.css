@@ -1,0 +1,10 @@
+.event {
+  color: #140ca9 !important;
+  font-size: x-large !important;
+  font-family: cursive !important;
+}
+
+.event-img {
+  height: 30vh !important;
+  width: 30vw;
+}

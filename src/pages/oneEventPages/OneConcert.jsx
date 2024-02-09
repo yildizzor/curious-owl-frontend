@@ -1,17 +1,15 @@
-import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { API_URL } from "../utils/constants";
+import { API_URL, dateToString } from "../../utils/constants";
 import { useParams } from "react-router-dom";
-import EventSidebar from "../components/EventSidebar";
-import Sidebar from "../components/Sidebar";
+import EventSidebar from "../../components/EventSidebar";
 
 function OneConcert(props) {
   const { concertId } = useParams();
   const [concert, setConcert] = useState({});
   const [errorsOfConcert, setErrorsOfConcert] = useState(undefined);
 
-  const getOneConcerts = () => {
+  const getOneConcert = () => {
     axios
       .get(`${API_URL}/api/concerts/${concertId}`)
       .then((response) => setConcert(response.data))
@@ -21,7 +19,7 @@ function OneConcert(props) {
       });
   };
 
-  useEffect(() => getOneConcerts(), []);
+  useEffect(() => getOneConcert(), []);
 
   return (
     <EventSidebar pageName="Concerts">
@@ -36,7 +34,7 @@ function OneConcert(props) {
               <div className="col-8">
                 <div className="col-12">
                   <label className="form-label">
-                    Concert Name: {concert.concertName}
+                    Concert Name: {concert.name}
                   </label>
                 </div>
                 <div className="col-12">
@@ -46,7 +44,7 @@ function OneConcert(props) {
                 </div>
                 <div className="col-12">
                   <label className="form-label">
-                    Type Of Music: {concert.typeOfMusic}
+                    Music Genre: {concert.typeOfMusic}
                   </label>
                 </div>
 
@@ -57,11 +55,18 @@ function OneConcert(props) {
                 </div>
 
                 <div className="col-12">
-                  <label className="form-label">Date: {concert.date}</label>
+                  <label className="form-label">
+                    Date: {dateToString(concert.date)}
+                  </label>
                 </div>
                 <div className="col-12">
                   <label className="form-label">
                     Age Limit: {concert.ageLimit}
+                  </label>
+                </div>
+                <div className="col-12">
+                  <label className="form-label">
+                    Comment: {concert.review}
                   </label>
                 </div>
               </div>

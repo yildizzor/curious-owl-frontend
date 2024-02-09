@@ -1,29 +1,15 @@
 import { NavLink } from "react-router-dom";
 import "./Navbar.css";
-import logo from "../assets/navbar-photos/owl-logo.png";
-import wisdomOwl from "../assets/navbar-photos/wisdom-owl.png";
+import { logo, wisdomOwl } from "../utils/constants";
 import { AuthContext } from "../context/auth.context";
 import { useContext } from "react";
-import {
-  Container,
-  Nav,
-  Navbar,
-  Image,
-  Button,
-  Tooltip,
-  OverlayTrigger,
-} from "react-bootstrap";
+import { Container, Nav, Navbar, Image, Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
+import ShowWithTooltip from "./common/ShowWithTooltip";
 
 function NavBar() {
   const { isLoggedIn, user, logOutUser } = useContext(AuthContext);
-
-  const renderTooltip = (props) => (
-    <Tooltip id="button-tooltip" {...props}>
-      Logout
-    </Tooltip>
-  );
 
   return (
     <>
@@ -74,15 +60,11 @@ function NavBar() {
                       />
                       <span>{user && user.name}</span>
                     </span>
-                    <OverlayTrigger
-                      placement="right"
-                      delay={{ show: 250, hide: 400 }}
-                      overlay={renderTooltip}
-                    >
+                    <ShowWithTooltip tooltipText={"Logout"}>
                       <Button onClick={logOutUser} className="logout-button">
                         <FontAwesomeIcon icon={faSignOutAlt} />
                       </Button>
-                    </OverlayTrigger>
+                    </ShowWithTooltip>
                   </div>
                 </>
               )}

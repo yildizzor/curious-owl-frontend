@@ -1,9 +1,9 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { API_URL } from "../utils/constants";
-import { AuthContext } from "../context/auth.context";
-import backgroundImg from "../assets/owl1.jpeg";
+import { API_URL } from "../../utils/constants";
+import { AuthContext } from "../../context/auth.context";
+import { backgroundImg } from "../../utils/constants";
 import "./Login.css";
 
 function Login(props) {
@@ -89,7 +89,7 @@ function Login(props) {
           {errorMessage && <div className="error-message">{errorMessage}</div>}
 
           <div className="col-12 mb-5">
-            <p>Do you have already an account?</p>
+            <p>Don't you have an account?</p>
             <button
               type="button"
               className="btn btn-outline-primary"

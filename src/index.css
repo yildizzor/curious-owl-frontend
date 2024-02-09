@@ -74,3 +74,15 @@ button:focus-visible {
   --xl: 1200px;
   --xxl: 1400px;
 }
+
+.success-message {
+  color: #198754;
+  font-size: 0.875em;
+  margin-top: 0.25rem;
+}
+
+.error-message {
+  color: #dc3545;
+  font-size: 0.875em;
+  margin-top: 0.25rem;
+}

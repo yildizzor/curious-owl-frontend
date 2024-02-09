@@ -1,21 +1,20 @@
 import { useContext } from "react";
-import backgroundImg from "../assets/owl1.jpeg";
-import { AuthContext } from "../context/auth.context";
+import { AuthContext } from "../../context/auth.context";
+import { backgroundImg } from "../../utils/constants";
 import "./ProfileForm.css";
 
 function ShowProfile() {
   const { user } = useContext(AuthContext);
 
   return (
-    <div className="personal-form-container m-4 static-text">
+    <div className="personal-form-container m-4 col-lg-9 col-12 static-text">
       <img
         className="personal-form-bg"
         src={backgroundImg}
         alt="background-img"
       />
-
-      <div className="personal-form col-12 col-sm-6 col-lg-4">
-        <div className="row g-2" >
+      <div className="personal-form col-10 col-sm-9 col-md-8 col-xl-5">
+        <div className="row g-2">
           <div className="col-8">
             <div className="col-12">
               <label className="form-label">Name: {user.name}</label>

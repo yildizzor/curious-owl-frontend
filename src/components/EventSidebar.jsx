@@ -1,4 +1,4 @@
-import Sidebar from "../components/Sidebar";
+import Sidebar from "./common/Sidebar";
 import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../context/auth.context";
 import { addEventItem, sidebarMenu } from "../utils/constants";

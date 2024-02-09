@@ -4,7 +4,6 @@ import { API_URL } from "../utils/constants";
 import { useNavigate } from "react-router-dom";
 
 const AuthContext = React.createContext();
-console.log(AuthContext);
 
 function AuthProviderWrapper(props) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -24,6 +23,7 @@ function AuthProviderWrapper(props) {
   const authenticateUser = () => {
     const storedToken = getToken();
     if (storedToken) {
+      setisLoading(true);
       axios
         .get(`${API_URL}/auth/verify`, {
           headers: { Authorization: `Bearer ${storedToken}` },
@@ -31,8 +31,6 @@ function AuthProviderWrapper(props) {
 
         .then((response) => {
           const user = response.data;
-
-          console.log(user);
 
           setIsLoggedIn(true);
           setisLoading(false);

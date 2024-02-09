@@ -1,39 +1,43 @@
 import { useState, useContext } from "react";
 import axios from "axios";
-import { API_URL, getSidebarMenuItem } from "../utils/constants";
+import { API_URL, getSidebarMenuItem } from "../../utils/constants";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/auth.context";
+import { AuthContext } from "../../context/auth.context";
+import ButtonStatus from "../common/ButtonStatus";
 
-function AddConcert({ selectedType }) {
-  const { getToken } = useContext(AuthContext);
-  const [concertName, setConcertName] = useState("");
-  const [soloistName, setSoloistName] = useState("");
-  const [typeOfMusic, settypeOfMusic] = useState("");
-  const [concertPlace, setConcertPlace] = useState("");
-  const [date, setDate] = useState("");
+function AddRestaurant({ selectedType }) {
+  const { getToken, user } = useContext(AuthContext);
+  const [name, setName] = useState("");
+  const [typeOfCuisine, setTypeOfCuisine] = useState("");
+  const [restaurantPlace, setRestaurantPlace] = useState("");
+  const [establishDate, setEstablishDate] = useState("");
   const [ageLimit, setAgeLimit] = useState(0);
   const [imageUrl, setImageUrl] = useState(null);
+  const [review, setReview] = useState("");
   const [errors, setErrors] = useState(undefined);
   const [successMessage, setSuccessMessage] = useState("");
+  const [isAxiosInProgress, setIsAxiosInProgress] = useState(false);
 
   const navigate = useNavigate();
 
-  const handleAddConcert = (event) => {
+  const handleAddRestaurant = (event) => {
     event.preventDefault();
 
     setErrors(undefined);
 
     const requestBody = new FormData();
-    requestBody.append("concertName", concertName);
-    requestBody.append("soloistName", soloistName);
-    requestBody.append("typeOfMusic", typeOfMusic);
-    requestBody.append("concertPlace", concertPlace);
-    requestBody.append("date", date);
+    requestBody.append("name", name);
+    requestBody.append("typeOfCuisine", typeOfCuisine);
+    requestBody.append("restaurantPlace", restaurantPlace);
+    requestBody.append("establishDate", establishDate);
     requestBody.append("ageLimit", ageLimit);
     requestBody.append("imageUrl", imageUrl);
+    requestBody.append("review", review);
+    requestBody.append("createdBy", user._id);
+    setIsAxiosInProgress(true);
 
     axios
-      .post(`${API_URL}/api/concerts`, requestBody, {
+      .post(`${API_URL}/api/restaurants`, requestBody, {
         headers: { Authorization: `Bearer ${getToken()}` },
       })
       .then((response) => {
@@ -46,62 +50,59 @@ function AddConcert({ selectedType }) {
       .catch((error) => {
         if (error.response) {
           setErrors(error.response.data);
+          console.log(error.response.data.detail);
         }
+      })
+      .finally(() => {
+        setTimeout(() => {
+          setIsAxiosInProgress(false);
+        }, 1000);
       });
   };
 
   return (
-    <div className=" add-concert col-12 col-sm-6 col-lg-4">
-      <form className="row g-2" onSubmit={handleAddConcert}>
+    <div className="add-event col-12 col-sm-10 col-md-8 col-lg-6">
+      <form className="row g-2" onSubmit={handleAddRestaurant}>
         <div className="col-12">
-          <label>Concert Name: </label>
+          <label>Restaurant Name: </label>
           <input
             type="text"
-            name="concertName"
+            name="name"
             className="form-control"
-            value={concertName}
-            onChange={(e) => setConcertName(e.target.value)}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
           />
         </div>
 
         <div className="col-12">
-          <label>Soloist Name: </label>
+          <label>Cuisine: </label>
           <input
             type="text"
-            name="soloistName"
+            name="typeOfCuisine"
             className="form-control"
-            value={soloistName}
-            onChange={(e) => setSoloistName(e.target.value)}
+            value={typeOfCuisine}
+            onChange={(e) => setTypeOfCuisine(e.target.value)}
           />
         </div>
         <div className="col-12">
-          <label>Music Type: </label>
+          <label>Place: </label>
           <input
             type="text"
-            name="typeOfMusic"
+            name="restaurantPlace"
             className="form-control"
-            value={typeOfMusic}
-            onChange={(e) => settypeOfMusic(e.target.value)}
+            value={restaurantPlace}
+            onChange={(e) => setRestaurantPlace(e.target.value)}
           />
         </div>
-        <div className="col-12">
-          <label>Concert Place: </label>
-          <input
-            type="text"
-            name="concertPlace"
-            className="form-control"
-            value={concertPlace}
-            onChange={(e) => setConcertPlace(e.target.value)}
-          />
-        </div>
+
         <div className="col-12">
           <label>Date: </label>
           <input
             type="date"
-            name="date"
+            name="establishDate"
             className="form-control"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
+            value={establishDate}
+            onChange={(e) => setEstablishDate(e.target.value)}
           />
         </div>
         <div className="col-12">
@@ -122,11 +123,25 @@ function AddConcert({ selectedType }) {
             name="imageUrl"
             onChange={(e) => setImageUrl(e.target.files[0])}
           />
+          <div className="col-12">
+            <label>Comment:</label>
+            <textarea
+              className="form-control float-right"
+              rows={5}
+              cols={100}
+              maxLength={400}
+              name="review"
+              value={review}
+              onChange={(e) => setReview(e.target.value)}
+            />
+          </div>
         </div>
         <div className="col-12">
-          <button type="submit" className="btn btn-primary">
-            Add Concert
-          </button>
+          <ButtonStatus
+            inProgress={isAxiosInProgress}
+            text="Add Restaurant"
+            inProgressText="Adding Restaurant..."
+          />
         </div>
 
         {errors &&
@@ -151,4 +166,4 @@ function AddConcert({ selectedType }) {
   );
 }
 
-export default AddConcert;
+export default AddRestaurant;
