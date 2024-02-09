@@ -76,7 +76,7 @@ function AddTheater({ selectedType }) {
         }, 2000);
       })
       .catch((error) => {
-        setValidated("was-validated");
+        setValidated("validated");
 
         if (error.response) {
           setErrors(error.response.data);
