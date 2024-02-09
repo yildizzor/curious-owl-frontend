@@ -20,7 +20,13 @@ import keukenhofImg from "../assets/homepage-photos/keukenhof.jpeg";
 import vatikanImg from "../assets/homepage-photos/vatikan.webp";
 import veniceImg from "../assets/homepage-photos/venice.jpeg";
 
-export const API_URL = "http://localhost:5005";
+export const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5005";
+
+export const addEventItem = {
+  type: "Add Event",
+  icon: faUserEdit,
+  link: "/addevent",
+};
 
 export const sidebarMenuProfile = [
   { type: "Profile", icon: faUserAlt },
@@ -32,6 +38,7 @@ export const sidebarMenuProfile = [
   { type: "Added Museums", icon: faBuildingColumns },
   { type: "Added Books", icon: faBook },
   { type: "Added Restaurants", icon: faWheatAlt },
+  addEventItem,
 ];
 
 export const sidebarMenu = [
@@ -52,12 +59,6 @@ export const eventTypesList = [
 ];
 
 export const typeOfEvent = sidebarMenu.slice(1, 6);
-
-export const addEventItem = {
-  type: "Add Event",
-  icon: faUserEdit,
-  link: "/addevent",
-};
 
 export const getSidebarMenuItem = (itemType) => {
   return sidebarMenu.filter((elem) => elem.type === itemType)[0];

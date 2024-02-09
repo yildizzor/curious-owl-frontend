@@ -7,6 +7,8 @@ import ButtonStatus from "../common/ButtonStatus";
 
 function AddRestaurant({ selectedType }) {
   const { getToken, user } = useContext(AuthContext);
+
+  // state variables to handle form field changes
   const [name, setName] = useState("");
   const [typeOfCuisine, setTypeOfCuisine] = useState("");
   const [restaurantPlace, setRestaurantPlace] = useState("");
@@ -14,16 +16,36 @@ function AddRestaurant({ selectedType }) {
   const [ageLimit, setAgeLimit] = useState(0);
   const [imageUrl, setImageUrl] = useState(null);
   const [review, setReview] = useState("");
+
+  // state variables to handle success and error messages with form submissions and component errors
   const [errors, setErrors] = useState(undefined);
   const [successMessage, setSuccessMessage] = useState("");
   const [isAxiosInProgress, setIsAxiosInProgress] = useState(false);
+  const [validated, setValidated] = useState("");
 
   const navigate = useNavigate();
+
+  const getClassName = (fieldName, defaultClassNames = "form-control") => {
+    if (errors) {
+      return `${defaultClassNames} ${
+        errors[fieldName] ? "is-invalid" : "is-valid"
+      }`;
+    }
+    return defaultClassNames;
+  };
 
   const handleAddRestaurant = (event) => {
     event.preventDefault();
 
     setErrors(undefined);
+
+    setValidated("");
+    const form = event.currentTarget;
+    if (form.checkValidity() == false) {
+      event.stopPropagation();
+      setValidated("was-validated");
+      return;
+    }
 
     const requestBody = new FormData();
     requestBody.append("name", name);
@@ -34,8 +56,8 @@ function AddRestaurant({ selectedType }) {
     requestBody.append("imageUrl", imageUrl);
     requestBody.append("review", review);
     requestBody.append("createdBy", user._id);
-    setIsAxiosInProgress(true);
 
+    setIsAxiosInProgress(true);
     axios
       .post(`${API_URL}/api/restaurants`, requestBody, {
         headers: { Authorization: `Bearer ${getToken()}` },
@@ -48,9 +70,12 @@ function AddRestaurant({ selectedType }) {
         }, 2000);
       })
       .catch((error) => {
+        setValidated("was-validated");
+
         if (error.response) {
           setErrors(error.response.data);
-          console.log(error.response.data.detail);
+        } else {
+          setErrors({ message: "Unexpected error occurs during API call" });
         }
       })
       .finally(() => {
@@ -62,78 +87,120 @@ function AddRestaurant({ selectedType }) {
 
   return (
     <div className="add-event col-12 col-sm-10 col-md-8 col-lg-6">
-      <form className="row g-2" onSubmit={handleAddRestaurant}>
+      <form
+        className={`row g-2 ${validated}`}
+        noValidate
+        onSubmit={handleAddRestaurant}
+      >
         <div className="col-12">
-          <label>Restaurant Name: </label>
+          <label className="form-label">Restaurant Name: </label>
           <input
             type="text"
             name="name"
-            className="form-control"
+            className={getClassName("name")}
             value={name}
+            required
             onChange={(e) => setName(e.target.value)}
           />
+          <div className="invalid-feedback">
+            {errors && errors.name
+              ? errors.name
+              : "Restaurant Name field is required!"}
+          </div>
         </div>
 
         <div className="col-12">
-          <label>Cuisine: </label>
+          <label className="form-label">Cuisine: </label>
           <input
             type="text"
             name="typeOfCuisine"
-            className="form-control"
+            className={getClassName("typeOfCuisine")}
+            required
             value={typeOfCuisine}
             onChange={(e) => setTypeOfCuisine(e.target.value)}
           />
+          <div className="invalid-feedback">
+            {errors && errors.typeOfCuisine
+              ? errors.typeOfCuisine
+              : "Cuisine field is required!"}
+          </div>
         </div>
         <div className="col-12">
-          <label>Place: </label>
+          <label className="form-label">Place: </label>
           <input
             type="text"
             name="restaurantPlace"
-            className="form-control"
+            className={getClassName("restaurantPlace")}
+            required
             value={restaurantPlace}
             onChange={(e) => setRestaurantPlace(e.target.value)}
           />
+          <div className="invalid-feedback">
+            {errors && errors.restaurantPlace
+              ? errors.restaurantPlace
+              : "Place field is required!"}
+          </div>
         </div>
 
         <div className="col-12">
-          <label>Date: </label>
+          <label className="form-label">Date: </label>
           <input
             type="date"
             name="establishDate"
-            className="form-control"
+            className={getClassName("establishDate")}
+            required
             value={establishDate}
             onChange={(e) => setEstablishDate(e.target.value)}
           />
+          <div className="invalid-feedback">
+            {errors && errors.establishDate
+              ? errors.establishDate
+              : "Date field is required!"}
+          </div>
         </div>
         <div className="col-12">
-          <label>Age Limit</label>
+          <label className="form-label">Age Limit</label>
           <input
             type="number"
             name="ageLimit"
-            className="form-control"
+            className={getClassName("ageLimit")}
+            required
             value={ageLimit}
             onChange={(e) => setAgeLimit(e.target.value)}
+            min={0}
+            max={150}
+          />
+          <div className="invalid-feedback">
+            {errors && errors.ageLimit
+              ? errors.ageLimit
+              : "Date field is required!"}
+          </div>
+        </div>
+        <div className="col-12">
+          <label className="form-label">Photo of Restaurant:</label>
+          <input
+            type="file"
+            name="imageUrl"
+            className={getClassName("imageUrl", "form-control float-right")}
+            onChange={(e) => setImageUrl(e.target.files[0])}
           />
         </div>
         <div className="col-12">
-          <label>Photo of Concert:</label>
-          <input
-            type="file"
-            className="form-control float-right"
-            name="imageUrl"
-            onChange={(e) => setImageUrl(e.target.files[0])}
+          <label className="form-label">Comment:</label>
+          <textarea
+            name="review"
+            className={getClassName("review")}
+            rows={5}
+            cols={100}
+            maxLength={400}
+            required
+            value={review}
+            onChange={(e) => setReview(e.target.value)}
           />
-          <div className="col-12">
-            <label>Comment:</label>
-            <textarea
-              className="form-control float-right"
-              rows={5}
-              cols={100}
-              maxLength={400}
-              name="review"
-              value={review}
-              onChange={(e) => setReview(e.target.value)}
-            />
+          <div className="invalid-feedback">
+            {errors && errors.review
+              ? errors.review
+              : "Comment of event creator is required!"}
           </div>
         </div>
         <div className="col-12">
@@ -144,19 +211,9 @@ function AddRestaurant({ selectedType }) {
           />
         </div>
 
-        {errors &&
-          Object.keys(errors)
-            .filter((element) => {
-              const value = errors[element];
-              return value !== undefined && value !== null && value !== "";
-            })
-            .map((element) => {
-              return (
-                <div key={element} className="error-message">
-                  {errors[element]}
-                </div>
-              );
-            })}
+        {errors && errors.message && (
+          <div className="error-message">{errors.message}</div>
+        )}
 
         {successMessage && (
           <div className="success-message">{successMessage}</div>

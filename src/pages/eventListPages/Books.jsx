@@ -20,7 +20,7 @@ function Books(props) {
   useEffect(() => getAllConcerts(), []);
 
   return (
-    <EventSidebar pageName="Concerts">
+    <EventSidebar pageName="Books">
       <EventList
         events={books}
         eventType="books"

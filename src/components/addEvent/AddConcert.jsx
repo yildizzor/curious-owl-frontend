@@ -4,10 +4,11 @@ import { API_URL, getSidebarMenuItem } from "../../utils/constants";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/auth.context";
 import ButtonStatus from "../common/ButtonStatus";
-import UnderlineInput from "../common/UndelineInput";
 
 function AddConcert({ selectedType }) {
   const { getToken, user } = useContext(AuthContext);
+
+  // state variables to handle form field changes
   const [name, setName] = useState("");
   const [soloistName, setSoloistName] = useState("");
   const [typeOfMusic, setTypeOfMusic] = useState("");
@@ -16,17 +17,22 @@ function AddConcert({ selectedType }) {
   const [ageLimit, setAgeLimit] = useState(0);
   const [imageUrl, setImageUrl] = useState(null);
   const [review, setReview] = useState("");
+
+  // state variables to handle success and error messages with form submissions and component errors
   const [errors, setErrors] = useState(undefined);
   const [successMessage, setSuccessMessage] = useState("");
-  const [validated, setValidated] = useState("");
   const [isAxiosInProgress, setIsAxiosInProgress] = useState(false);
+  const [validated, setValidated] = useState("");
+
   const navigate = useNavigate();
 
-  const validClassName = (fieldName) => {
+  const getClassName = (fieldName, defaultClassNames = "form-control") => {
     if (errors) {
-      return `form-control ${errors[fieldName] ? "is-invalid" : "is-valid"}`;
+      return `${defaultClassNames} ${
+        errors[fieldName] ? "is-invalid" : "is-valid"
+      }`;
     }
-    return "form-control";
+    return defaultClassNames;
   };
 
   const handleAddConcert = (event) => {
@@ -70,7 +76,8 @@ function AddConcert({ selectedType }) {
 
         if (error.response) {
           setErrors(error.response.data);
-          console.log(error.response.data);
+        } else {
+          setErrors({"message": "Unexpected error occurs during API call"})
         }
       })
       .finally(() => {
@@ -92,7 +99,7 @@ function AddConcert({ selectedType }) {
           <input
             type="text"
             name="name"
-            className={validClassName("name")}
+            className={getClassName("name")}
             value={name}
             required
             onChange={(e) => setName(e.target.value)}
@@ -109,7 +116,7 @@ function AddConcert({ selectedType }) {
           <input
             type="text"
             name="soloistName"
-            className="form-control"
+            className={getClassName("soloistName")}
             required
             value={soloistName}
             onChange={(e) => setSoloistName(e.target.value)}
@@ -125,7 +132,7 @@ function AddConcert({ selectedType }) {
           <input
             type="text"
             name="typeOfMusic"
-            className="form-control"
+            className={getClassName("typeOfMusic")}
             required
             value={typeOfMusic}
             onChange={(e) => setTypeOfMusic(e.target.value)}
@@ -141,7 +148,7 @@ function AddConcert({ selectedType }) {
           <input
             type="text"
             name="concertPlace"
-            className="form-control"
+            className={getClassName("concertPlace")}
             required
             value={concertPlace}
             onChange={(e) => setConcertPlace(e.target.value)}
@@ -157,7 +164,7 @@ function AddConcert({ selectedType }) {
           <input
             type="date"
             name="date"
-            className="form-control"
+            className={getClassName("date")}
             required
             value={date}
             onChange={(e) => setDate(e.target.value)}
@@ -173,10 +180,12 @@ function AddConcert({ selectedType }) {
           <input
             type="number"
             name="ageLimit"
-            className="form-control"
+            className={getClassName("ageLimit")}
             required
             value={ageLimit}
             onChange={(e) => setAgeLimit(e.target.value)}
+            min={0}
+            max={150}
           />
           <div className="invalid-feedback">
             {errors && errors.ageLimit
@@ -188,19 +197,19 @@ function AddConcert({ selectedType }) {
           <label className="form-label">Photo of Concert:</label>
           <input
             type="file"
-            className="form-control float-right"
             name="imageUrl"
+            className={getClassName("imageUrl", "form-control float-right")}
             onChange={(e) => setImageUrl(e.target.files[0])}
           />
         </div>
         <div className="col-12">
           <label className="form-label">Comment:</label>
           <textarea
-            className="form-control float-right"
+            name="review"
+            className={getClassName("review")}
             rows={5}
             cols={100}
             maxLength={400}
-            name="review"
             required
             value={review}
             onChange={(e) => setReview(e.target.value)}
