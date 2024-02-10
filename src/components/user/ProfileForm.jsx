@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { API_URL } from "../../utils/constants";
+import { API_URL, avatar } from "../../utils/constants";
 import { AuthContext } from "../../context/auth.context";
 import "./ProfileForm.css";
 import ButtonStatus from "../common/ButtonStatus";
@@ -20,7 +20,7 @@ function ProfileForm() {
 
   useEffect(() => {
     console.log(imageUrl);
-    if (typeof imageUrl === "string") {
+    if (!imageUrl || typeof imageUrl === "string") {
       return;
     }
 
@@ -90,13 +90,11 @@ function ProfileForm() {
             </div>
           </div>
           <div className="col-4">
-            {previewUrl && (
-              <img
-                src={previewUrl}
-                className="float-right avatar-image rounded-circle"
-                alt="profile photo"
-              ></img>
-            )}
+            <img
+              src={previewUrl || avatar}
+              className="float-right avatar-image rounded-circle"
+              alt="profile photo"
+            ></img>
           </div>
           <div className="col-3"></div>
           <div className="col-9">
