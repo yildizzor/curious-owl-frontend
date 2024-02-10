@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { AuthContext } from "../../context/auth.context";
-import { backgroundImg } from "../../utils/constants";
+import { backgroundImg, avatar } from "../../utils/constants";
 import "./ProfileForm.css";
 
 function ShowProfile() {
@@ -25,7 +25,7 @@ function ShowProfile() {
           </div>
           <div className="col-4">
             <img
-              src={user.imageUrl}
+              src={user.imageUrl || avatar}
               className="float-right avatar-image rounded-circle"
               alt="profile photo"
             ></img>

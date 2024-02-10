@@ -15,8 +15,9 @@ function OneBook(props) {
   const [book, setBook] = useState(undefined);
   const [isAxiosLoading, setIsAxiosLoading] = useState(false);
   const [reviews, setReviews] = useState([]);
-  const [errorsOfBook, setErrorsOfBook] = useState(undefined);
   const [successMessage, setSuccessMessage] = useState("");
+
+  const [errorsOfBook, setErrorsOfBook] = useState(undefined);
 
   const getOneBook = () => {
     setIsAxiosLoading(true);
