@@ -13,10 +13,22 @@ function ProfileForm() {
   const [password, setPassword] = useState("");
   const [country, setCountry] = useState(user.country);
   const [imageUrl, setImageUrl] = useState(user.imageUrl);
+
+  // state variables to handle success and error messages with form submissions and component errors
   const [errors, setErrors] = useState(undefined);
   const [previewUrl, setPreviewUrl] = useState(user.imageUrl);
-  const [success, setSuccess] = useState(false);
   const [isAxiosInProgress, setIsAxiosInProgress] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [validated, setValidated] = useState("");
+
+  const getClassName = (fieldName, defaultClassNames = "form-control") => {
+    if (errors) {
+      return `${defaultClassNames} ${
+        errors[fieldName] ? "is-invalid" : "is-valid"
+      }`;
+    }
+    return defaultClassNames;
+  };
 
   useEffect(() => {
     console.log(imageUrl);
@@ -39,17 +51,24 @@ function ProfileForm() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
     setSuccess(false);
     setErrors(undefined);
 
-    const requestBody = new FormData();
+    setValidated("");
+    const form = event.currentTarget;
+    if (form.checkValidity() == false) {
+      event.stopPropagation();
+      setValidated("was-validated");
+      return;
+    }
 
+    const requestBody = new FormData();
     requestBody.append("email", user.email);
     requestBody.append("password", password);
     requestBody.append("country", country);
     requestBody.append("imageUrl", imageUrl);
 
-    console.log(requestBody, country);
     setIsAxiosInProgress(true);
     axios
       .put(`${API_URL}/api/user`, requestBody, {
@@ -62,12 +81,18 @@ function ProfileForm() {
       })
       .catch((error) => {
         setSuccess(false);
+        setValidated("validated");
+
         if (error.response) {
           setErrors(error.response.data);
+        } else {
+          setErrors({ message: "Unexpected error occurs during API call" });
         }
       })
       .finally(() => {
-        setIsAxiosInProgress(false);
+        setTimeout(() => {
+          setIsAxiosInProgress(false);
+        }, 1000);
       });
   };
 
@@ -80,7 +105,11 @@ function ProfileForm() {
       />
 
       <div className="personal-form col-10 col-sm-9 col-md-8 col-xl-7">
-        <form className="row g-2" onSubmit={handleSubmit}>
+        <form
+          className={`row g-2 ${validated}`}
+          noValidate
+          onSubmit={handleSubmit}
+        >
           <div className="col-8">
             <div className="col-12">
               <label className="form-label">Name: {user.name}</label>
@@ -100,7 +129,7 @@ function ProfileForm() {
           <div className="col-9">
             <input
               type="file"
-              className="form-control"
+              className={getClassName("imageUrl")}
               name="imageUrl"
               onChange={handleFileUpload}
             />
@@ -110,20 +139,30 @@ function ProfileForm() {
             <input
               type="password"
               name="password"
-              className="form-control"
+              className={getClassName("password")}
               value={password}
               onChange={handlePassword}
             />
+            <div className="invalid-feedback">
+              {errors && errors.password
+                ? errors.password
+                : "Password field error occurs!"}
+            </div>
           </div>
           <div className="col-12">
             <label className="form-label">Country</label>
             <input
               type="text"
               name="country"
-              className="form-control mb-3"
+              className={getClassName("country", "form-control mb-3")}
               value={country}
               onChange={handleCountry}
             />
+            <div className="invalid-feedback">
+              {errors && errors.country
+                ? errors.country
+                : "Country field error occurs!"}
+            </div>
           </div>
           <div className="col-12">
             <ButtonStatus
@@ -133,19 +172,10 @@ function ProfileForm() {
             />
           </div>
 
-          {errors &&
-            Object.keys(errors)
-              .filter((element) => {
-                const value = errors[element];
-                return value !== undefined && value !== null && value !== "";
-              })
-              .map((element) => {
-                return (
-                  <div key={element} className="error-message">
-                    {errors[element]}
-                  </div>
-                );
-              })}
+          {errors && errors.message && (
+            <div className="error-message">{errors.message}</div>
+          )}
+
           {success && (
             <div className="success-message">
               Profile is successfully updated
