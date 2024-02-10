@@ -1,14 +1,18 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import {
   API_URL,
   dateToString,
   defaultEventPhoto,
 } from "../../utils/constants";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import EventSidebar from "../../components/EventSidebar";
 import EventReviews from "../../components/review/EventReviews";
-import { Spinner } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
+import { AuthContext } from "../../context/auth.context";
+import ShowWithTooltip from "../../components/common/ShowWithTooltip";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 
 function OneConcert(props) {
   const { concertId } = useParams();
@@ -18,6 +22,22 @@ function OneConcert(props) {
   const [successMessage, setSuccessMessage] = useState("");
 
   const [errorsOfConcert, setErrorsOfConcert] = useState(undefined);
+
+  const navigate = useNavigate();
+  const { user, isLoggedIn, getToken } = useContext(AuthContext);
+
+  const deleteEvent = async () => {
+    try {
+      await axios.delete(`${API_URL}/api/concerts/${concertId}`, {
+        headers: { Authorization: `Bearer ${getToken()}` },
+      });
+      console.log("Event is successfully deleted");
+      navigate(`/events`);
+    } catch (err) {
+      if (err.response) setErrorsOfConcert(err.response.data);
+      else setErrorsOfConcert("An error occurs while event deletion");
+    }
+  };
 
   const getOneConcert = () => {
     setIsAxiosLoading(true);
@@ -100,6 +120,22 @@ function OneConcert(props) {
                   <b>Comment by {concert.createdBy.name}:</b> {concert.review}
                 </label>
               </div>
+              {isLoggedIn && user._id === concert.createdBy._id && (
+                <div className="col-12">
+                  <ShowWithTooltip
+                    tooltipText={"Delete Concert"}
+                    placement="bottom"
+                  >
+                    <Button
+                      variant="link"
+                      onClick={deleteEvent}
+                      style={{ marginLeft: "30px" }}
+                    >
+                      <FontAwesomeIcon icon={faTrashAlt}></FontAwesomeIcon>
+                    </Button>
+                  </ShowWithTooltip>
+                </div>
+              )}
             </div>
           </div>
         )}

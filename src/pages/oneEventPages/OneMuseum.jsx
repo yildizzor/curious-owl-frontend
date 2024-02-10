@@ -1,14 +1,18 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import {
   API_URL,
   dateToString,
   defaultEventPhoto,
 } from "../../utils/constants";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import EventSidebar from "../../components/EventSidebar";
 import EventReviews from "../../components/review/EventReviews";
-import { Spinner } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
+import { AuthContext } from "../../context/auth.context";
+import ShowWithTooltip from "../../components/common/ShowWithTooltip";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 
 function OneMuseum(props) {
   const { museumId } = useParams();
@@ -18,6 +22,22 @@ function OneMuseum(props) {
   const [successMessage, setSuccessMessage] = useState("");
 
   const [errorsOfMuseum, setErrorsOfMuseum] = useState(undefined);
+
+  const navigate = useNavigate();
+  const { user, isLoggedIn, getToken } = useContext(AuthContext);
+
+  const deleteEvent = async () => {
+    try {
+      await axios.delete(`${API_URL}/api/museums/${museumId}`, {
+        headers: { Authorization: `Bearer ${getToken()}` },
+      });
+      console.log("Event is successfully deleted");
+      navigate(`/events`);
+    } catch (err) {
+      if (err.response) setErrorsOfMuseum(err.response.data);
+      else setErrorsOfMuseum("An error occurs while event deletion");
+    }
+  };
 
   const getOneMuseum = () => {
     setIsAxiosLoading(true);
@@ -96,6 +116,22 @@ function OneMuseum(props) {
                   <b>Comment by {museum.createdBy.name}:</b> {museum.review}
                 </label>
               </div>
+              {isLoggedIn && user._id === museum.createdBy._id && (
+                <div className="col-12">
+                  <ShowWithTooltip
+                    tooltipText={"Delete Museum"}
+                    placement="bottom"
+                  >
+                    <Button
+                      variant="link"
+                      onClick={deleteEvent}
+                      style={{ marginLeft: "30px" }}
+                    >
+                      <FontAwesomeIcon icon={faTrashAlt}></FontAwesomeIcon>
+                    </Button>
+                  </ShowWithTooltip>
+                </div>
+              )}
             </div>
           </div>
         )}

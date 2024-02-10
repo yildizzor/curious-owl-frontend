@@ -1,5 +1,6 @@
 import { Row, Spinner } from "react-bootstrap";
 import EventCard from "./EventCard";
+import { useState } from "react";
 
 function EventList({ events, eventType, isLoading }) {
   const isEventsEmpty = () => events && events.length == 0;
